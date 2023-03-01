@@ -1,4 +1,4 @@
-package com.vape.model;
+package com.vape.model.comunication;
 
 import java.io.Serializable;
 
