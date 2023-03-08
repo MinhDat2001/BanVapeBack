@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: vape_v1
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 12345678
+    ports:
+      - '3305:3306'
