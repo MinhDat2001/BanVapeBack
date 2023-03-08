@@ -5,12 +5,12 @@ import net.minidev.json.JSONObject;
 public class Response {
     private int status;
     private String message;
-    private JSONObject data;
+    private String data;
 
     public Response() {
     }
 
-    public Response(int status, String message, JSONObject data) {
+    public Response(int status, String message, String data) {
         this.status = status;
         this.message = message;
         this.data = data;
@@ -32,11 +32,11 @@ public class Response {
         this.message = message;
     }
 
-    public JSONObject getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
