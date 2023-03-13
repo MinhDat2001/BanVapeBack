@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vape.ObjectToJson.ObjToJson;
 import com.vape.entity.Product;
 import com.vape.model.comunication.Response;
-import com.vape.repository.ProductRepository;
 import com.vape.service.ProductService;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/product")
@@ -17,13 +19,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    private ObjToJson objToJson;
+    @Autowired
+    private ObjToJson<Product> objToJson;
 
     @GetMapping("/getAll")
-    public Response getAllProduct() throws JsonProcessingException {
+    public Response getAllProduct(){
         return new Response(HttpStatus.OK.value(),
                 "Lấy thông tin tất cả sản phẩm thành công",
-                objToJson.convert(productService.getAllProduct()));
+                        objToJson.convert(productService.getAllProduct().get()));
     }
 
     @GetMapping("/getOne/{id}")
@@ -32,7 +35,7 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public void createProduct(Product product){
+    public void createProduct(@RequestBody Product product){
 
     }
 

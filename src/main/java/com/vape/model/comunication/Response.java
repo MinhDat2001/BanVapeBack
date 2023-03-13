@@ -2,15 +2,15 @@ package com.vape.model.comunication;
 
 import net.minidev.json.JSONObject;
 
-public class Response {
+public class Response <T> {
     private int status;
     private String message;
-    private String data;
+    private JSONObject data;
 
     public Response() {
     }
 
-    public Response(int status, String message, String data) {
+    public Response(int status, String message, JSONObject data) {
         this.status = status;
         this.message = message;
         this.data = data;
@@ -32,11 +32,11 @@ public class Response {
         this.message = message;
     }
 
-    public String getData() {
+    public JSONObject getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(JSONObject data) {
         this.data = data;
     }
 }

@@ -46,9 +46,9 @@ public class JwtAuthenticationController {
             final String token = jwtTokenUtil.generateToken(userDetails);
             response.setStatus(200);
             response.setMessage("SUCCESS");
-//            JSONObject tk =  new JSONObject();
-//            tk.put("token", token);
-            response.setData(token);
+            JSONObject tk =  new JSONObject();
+            tk.put("token", tk);
+            response.setData(tk);
             return response;
         }catch (Exception e){
             response.setStatus(400);
