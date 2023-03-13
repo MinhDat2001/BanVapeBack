@@ -3,6 +3,7 @@ package com.vape.service.impl;
 import com.vape.entity.Category;
 import com.vape.entity.Product;
 import com.vape.entity.ProductDetail;
+import com.vape.model.reponse.ProductResponse;
 import com.vape.repository.ProductRepository;
 import com.vape.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -27,16 +29,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getAllProduct(int pageNumber, int pageSize, String sortField, String sortOrder) {
+    public Page<ProductResponse> getAllProduct(int pageNumber, int pageSize, String sortField, String sortOrder) {
         Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        return productRepository.findAll(pageable);
-    }
-
-    public List<Product> getAllProducts(int pageNumber, int pageSize, String sortField, String sortOrder) {
-        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        return productRepository.findAll(pageable).getContent();
+        return productRepository.findAll(pageable).map(product ->
+                ProductResponse.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .avatar(product.getAvatar())
+                        .quantity(product.getQuantity())
+                        .price(product.getPrice())
+                        .description(product.getDescription())
+                        .build());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.vape.entity.Product;
 import com.vape.model.base.VapePage;
 import com.vape.model.base.VapeResponse;
 import com.vape.model.base.Error;
+import com.vape.model.reponse.ProductResponse;
 import com.vape.model.request.CustomPageRequest;
 import com.vape.repository.ProductRepository;
 import com.vape.service.ProductService;
@@ -24,26 +25,18 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    ProductRepository productRepository;
-
     @PostMapping
     public VapeResponse<Boolean> createProduct() {
         return null;
     }
 
-    @PostMapping("/product")
-    public VapeResponse<Page<Product>> getAllProducts(@RequestBody CustomPageRequest request) {
+    @PostMapping("/products")
+    public VapeResponse<Page<ProductResponse>> getAllProducts(@RequestBody CustomPageRequest request) {
         request.checkData();
-        Page<Product> products = productService.getAllProduct(request.getPageNumber(),
+        Page<ProductResponse> products = productService.getAllProduct(request.getPageNumber(),
                 request.getPageSize(),
                 request.getSortField(),
                 request.getSortOrder());
         return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), products);
-    }
-
-    @GetMapping("product")
-    public VapeResponse<List<Product>> getAllProducts() {
-        return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), productRepository.findAll());
     }
 }

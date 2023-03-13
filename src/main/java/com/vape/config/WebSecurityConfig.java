@@ -55,8 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/authenticate",
                         "/",
-                        "/product",
-                        "product/*",
+                        "/products",
+                        "/product/*",
                         "/contact",
                         "/api",
                         "/api/*"

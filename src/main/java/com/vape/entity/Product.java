@@ -2,10 +2,7 @@ package com.vape.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,25 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
+@Getter
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("name")
     private String name;
 
-    @JsonProperty("avatar")
     private String avatar;
 
-    @JsonProperty("quantity")
     private int quantity;
 
-    @JsonProperty("price")
     private int price;
 
-    @JsonProperty("description")
     private String description;
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL)
