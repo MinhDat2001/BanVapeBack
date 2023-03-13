@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin()
 public class HelloWorldController {
 
-    @PostMapping("/hello")
-    public String hello() {
-        return "Hello World";
-    }
+//    @PostMapping("/product")
+//    public String hello() {
+//        return "Hello World";
+//    }
 
 }

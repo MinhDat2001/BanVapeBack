@@ -39,6 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(5);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                logger.warn("username: "+username);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -48,7 +49,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT Token does not begin with Vape String");
         }
         logger.warn("requestTokenHeader: "+requestTokenHeader);
-        logger.warn("username: "+username);
 
         //Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
