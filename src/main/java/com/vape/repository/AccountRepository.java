@@ -14,3 +14,4 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "DELETE * FROM account WHERE email=:email", nativeQuery = true)
     public Account deleteAccountByEmail(@Param("email") String email);
 }
+
