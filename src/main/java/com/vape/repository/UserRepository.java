@@ -10,8 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user WHERE email=:email", nativeQuery = true)
-    public Account getUserByEmail(@Param("email") String email);
+    public User getUserByEmail(@Param("email") String email);
 
     @Query(value = "DELETE * FROM user WHERE email=:email", nativeQuery = true)
-    public Account deleteUserByEmail(@Param("email") String email);
+    public User deleteUserByEmail(@Param("email") String email);
+
+    @Query(value = "DELETE * FROM user", nativeQuery = true)
+    public User getAllUsers(@Param("PageNo") Integer PageNo , @Param("PageSize") Integer PageSize, @Param("sortField") String sortField, @Param("sortOrder") String sortOrder);
 }
