@@ -26,7 +26,7 @@ public class ProductController {
     public Response getAllProduct(){
         return new Response(HttpStatus.OK.value(),
                 "Lấy thông tin tất cả sản phẩm thành công",
-                        objToJson.convert(productService.getAllProduct().get()));
+                        objToJson.convert(productService.getAllProduct()));
     }
 
     @GetMapping("/getOne/{id}")

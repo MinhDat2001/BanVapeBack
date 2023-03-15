@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.vape.entity.Product;
 import net.minidev.json.JSONObject;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ObjToJson<T> {
     public ObjToJson(){
     }
 
-    public JSONObject convert(T object){
+    public JSONObject convert(Page<T> object){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("object recieved", object);
         return jsonObject;

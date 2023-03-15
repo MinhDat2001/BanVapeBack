@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 public class ProductServiceImpl  implements ProductService {
@@ -16,9 +17,10 @@ public class ProductServiceImpl  implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public Optional<Product> getAllProduct() {
+    public Page<Product> getAllProduct() {
         Pageable pageProduct = (Pageable) PageRequest.of(0,9);
-        Page<Product> allProduct = productRepository.findAll(Sort.by("name", "price", "quantity"));
-        return productRepository.findById(1L);
+        Sort sort = Sort.by("name", "price").descending();
+//        Page<Product> allProduct = productRepository.findAll(Sort.by("name", "price", "quantity"));
+        return productRepository.findAll(pageProduct, sort);
     }
 }
