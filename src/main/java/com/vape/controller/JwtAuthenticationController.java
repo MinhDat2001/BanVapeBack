@@ -3,8 +3,9 @@ package com.vape.controller;
 
 import java.util.Objects;
 
+import com.vape.model.base.Error;
+import com.vape.model.base.VapeResponse;
 import com.vape.model.comunication.Response;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,7 +36,7 @@ public class JwtAuthenticationController {
     private UserDetailsService jwtInMemoryUserDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public Response createAuthenticationToken(@RequestBody JwtRequest authenticationRequest){
+    public VapeResponse<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest){
         Response response = new Response();
         try {
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -44,16 +45,9 @@ public class JwtAuthenticationController {
                     .loadUserByUsername(authenticationRequest.getUsername());
 
             final String token = jwtTokenUtil.generateToken(userDetails);
-            response.setStatus(200);
-            response.setMessage("SUCCESS");
-            JSONObject tk =  new JSONObject();
-            tk.put("token", token);
-            response.setData(tk);
-            return response;
+            return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), token);
         }catch (Exception e){
-            response.setStatus(400);
-            response.setMessage("FAILURE");
-            return response;
+            return VapeResponse.newInstance(Error.INVALID_AUTHENTICATION.getErrorCode(), Error.INVALID_AUTHENTICATION.getMessage(), null);
         }
     }
 

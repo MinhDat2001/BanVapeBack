@@ -15,6 +15,16 @@ public class User implements Serializable {
     private String email;
     private String name;
     private String phone;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     private String role;
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)

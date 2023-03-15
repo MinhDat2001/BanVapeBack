@@ -1,5 +1,6 @@
 package com.vape.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -14,7 +15,7 @@ public class BillItem implements Serializable {
     private Long id;
     private int quantity;
     private int price;
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id", insertable=false, updatable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
