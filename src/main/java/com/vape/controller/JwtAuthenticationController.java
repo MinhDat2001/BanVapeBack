@@ -3,8 +3,8 @@ package com.vape.controller;
 
 import java.util.Objects;
 
+import com.vape.helper.ConvertJson;
 import com.vape.model.comunication.Response;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,12 +44,7 @@ public class JwtAuthenticationController {
                     .loadUserByUsername(authenticationRequest.getUsername());
 
             final String token = jwtTokenUtil.generateToken(userDetails);
-            response.setStatus(200);
-            response.setMessage("SUCCESS");
-            JSONObject tk =  new JSONObject();
-            tk.put("token", token);
-            response.setData(tk);
-            return response;
+            return new Response(200, "Success", ConvertJson.ObjectToJson(token));
         }catch (Exception e){
             response.setStatus(400);
             response.setMessage("FAILURE");

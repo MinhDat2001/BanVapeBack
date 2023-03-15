@@ -1,11 +1,13 @@
 package com.vape.service;
 
+import com.vape.entity.Account;
 import com.vape.entity.User;
 import com.vape.repository.UserRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,5 +55,15 @@ public class UserService  {
 
     public void delete(User entity) {
         userRepository.delete(entity);
+    }
+
+    @Query(value = "SELECT * FROM user WHERE email=:email", nativeQuery = true)
+    public Account getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
+    @Query(value = "DELETE * FROM user WHERE email=:email", nativeQuery = true)
+    public Account deleteUserByEmail(String email) {
+        return userRepository.deleteUserByEmail(email);
     }
 }

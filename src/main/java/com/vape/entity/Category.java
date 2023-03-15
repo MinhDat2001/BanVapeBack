@@ -1,5 +1,6 @@
 package com.vape.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<Product> products;
 }

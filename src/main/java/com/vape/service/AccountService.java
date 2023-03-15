@@ -59,4 +59,9 @@ public class AccountService  {
     public Account getAccountByEmail(String email) {
         return accountRepository.getAccountByEmail(email);
     }
+
+    @Query(value = "DELETE * FROM account WHERE email=:email", nativeQuery = true)
+    public Account deleteAccountByEmail(String email) {
+        return accountRepository.deleteAccountByEmail(email);
+    }
 }

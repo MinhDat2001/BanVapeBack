@@ -1,21 +1,19 @@
 package com.vape.model;
 
 public class User {
-    private Long id;
     private String email;
     private String name;
     private String phone;
-    private String role;
+    private String password;
 
     public User() {
     }
 
-    public User(Long id, String email, String name, String phone, String role) {
-        this.id = id;
+    public User(String email, String name, String phone, String password) {
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.role = role;
+        this.password = password;
     }
 
     public String getEmail() {
@@ -42,11 +40,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

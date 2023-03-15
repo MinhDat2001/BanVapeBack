@@ -10,4 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "SELECT * FROM account WHERE email=:email", nativeQuery = true)
     public Account getAccountByEmail(@Param("email") String email);
+
+    @Query(value = "DELETE * FROM account WHERE email=:email", nativeQuery = true)
+    public Account deleteAccountByEmail(@Param("email") String email);
 }
