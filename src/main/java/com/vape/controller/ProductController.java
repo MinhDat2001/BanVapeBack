@@ -3,6 +3,7 @@ package com.vape.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vape.ObjectToJson.ObjToJson;
 import com.vape.entity.Product;
+import com.vape.model.comunication.PageSortRequest;
 import com.vape.model.comunication.Response;
 import com.vape.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ public class ProductController {
     private ObjToJson<Product> objToJson;
 
     @GetMapping("/getAll")
-    public Response getAllProduct(){
+    public Response getAllProduct(@RequestBody PageSortRequest request){
         return new Response(HttpStatus.OK.value(),
                 "Lấy thông tin tất cả sản phẩm thành công",
-                        objToJson.convert(productService.getAllProduct()));
+                        objToJson.convert(productService.getAllProduct(request)));
     }
 
     @GetMapping("/getOne/{id}")

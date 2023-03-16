@@ -18,7 +18,7 @@ public class ObjToJson<T> {
     public ObjToJson(){
     }
 
-    public JSONObject convert(Page<T> object){
+    public JSONObject convert(List<T> object){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("object recieved", object);
         return jsonObject;
