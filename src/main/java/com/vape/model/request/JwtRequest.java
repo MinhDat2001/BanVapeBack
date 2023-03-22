@@ -1,4 +1,4 @@
-package com.vape.model.comunication;
+package com.vape.model.request;
 
 
 import java.io.Serializable;
