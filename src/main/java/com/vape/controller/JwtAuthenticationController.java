@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import com.vape.model.base.Error;
 import com.vape.model.base.VapeResponse;
-import com.vape.model.comunication.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vape.config.JwtTokenUtil;
-import com.vape.model.comunication.JwtRequest;
+import com.vape.model.request.JwtRequest;
 
 @RestController
 @CrossOrigin
@@ -37,7 +36,6 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public VapeResponse<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest){
-        Response response = new Response();
         try {
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
