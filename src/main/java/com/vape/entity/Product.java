@@ -1,6 +1,8 @@
 package com.vape.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.Gson;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,17 +20,20 @@ public class Product implements Serializable {
     private int quantity;
     private int price;
     private String description;
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<ProductDetail> productDetails;
+
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "id", insertable=false, updatable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Category category;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<Image> images;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<Vote> votes;
@@ -83,5 +88,10 @@ public class Product implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
