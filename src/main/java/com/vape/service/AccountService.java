@@ -55,12 +55,12 @@ public class AccountService  {
         accountRepository.delete(entity);
     }
 
-    @Query(value = "SELECT * FROM account WHERE email=:email", nativeQuery = true)
+    @Query(value = "SELECT * FROM account inner join user on account.id = user.id WHERE account.email=:email AND user.status = 1", nativeQuery = true)
     public Account getAccountByEmail(String email) {
         return accountRepository.getAccountByEmail(email);
     }
 
-    @Query(value = "DELETE * FROM account WHERE email=:email", nativeQuery = true)
+    @Query(value = "DELETE * FROM account inner join user on account.id = user.id WHERE account.email=:email AND user.status = 1", nativeQuery = true)
     public Account deleteAccountByEmail(String email) {
         return accountRepository.deleteAccountByEmail(email);
     }

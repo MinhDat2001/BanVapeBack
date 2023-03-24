@@ -57,17 +57,17 @@ public class UserService  {
         userRepository.delete(entity);
     }
 
-    @Query(value = "SELECT * FROM user WHERE email=:email", nativeQuery = true)
+    @Query(value = "SELECT * FROM user WHERE email=:email AND user.status = 1", nativeQuery = true)
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
 
-    @Query(value = "DELETE * FROM user WHERE ", nativeQuery = true)
+    @Query(value = "DELETE * FROM user  WHERE user.email=:email AND user.status = 1", nativeQuery = true)
     public User deleteUserByEmail(String email) {
         return userRepository.deleteUserByEmail(email);
     }
 
-    @Query(value = "DELETE * FROM user WHERE email=:email", nativeQuery = true)
+    @Query(value = "SELECT * FROM user WHERE email=:email", nativeQuery = true)
     public User getAllUsers(Integer PageNo, Integer PageSize, String sortField, String sortOrder) {
         return userRepository.getAllUsers(PageNo, PageSize, sortField, sortOrder);
     }

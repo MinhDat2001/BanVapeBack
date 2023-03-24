@@ -58,7 +58,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/products",
                         "/product/*",
                         "/contact",
-                        "/register"
+                        "/register",
+                        "/register/auth"
                 )
                 .permitAll()
                 // all other requests need to be authenticated
