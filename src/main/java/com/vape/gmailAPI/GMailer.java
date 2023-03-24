@@ -86,7 +86,7 @@ public class GMailer {
     }
 
     public static void main(String[] args) throws Exception {
-        new GMailer().sendMail("hungkojno1@gmail.com", "Tạo tài khoản Vape shop", MailForm.mailForm("Minh Đạt", 8888));
+        new GMailer().sendMail("datd61340@gmail.com", "Tạo tài khoản Vape shop", MailForm.mailForm("Minh Đạt", 8888));
     }
 
 }
