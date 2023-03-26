@@ -10,8 +10,8 @@ public class MailForm {
                 "<br/>" +
                 "<h4>Liên hệ</h4>" +
                 "<p>Đặng Minh Đạt</p>" +
-                "<p>Phone: <a href=\"tel:0963632312\">" +"0963632312</a></p>" +
-                "<p>Email: <a href=\"mailto:dangminhdat@minhdat.dev\">dangminhdat@minhdat.dev</a></p>";
+                "<p>Phone: <a style=\"text-decoration: none;\" href=\"tel:0963632312\">" +"0963632312</a></p>" +
+                "<p>Email: <a style=\"text-decoration: none;\" href=\"mailto:dangminhdat@minhdat.dev\">dangminhdat@minhdat.dev</a></p>";
         return res;
     }
 }
