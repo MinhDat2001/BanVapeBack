@@ -1,8 +1,6 @@
 package com.vape.model.reponse;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.vape.entity.Category;
@@ -14,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -46,7 +43,6 @@ public class ProductResponse {
     @JsonProperty("description")
     private String description;
 
-    @JsonIgnore
     @SerializedName("product_details")
     @JsonProperty("product_details")
     private List<ProductDetail> productDetails;
@@ -55,13 +51,12 @@ public class ProductResponse {
     @JsonProperty("category")
     private Category category;
 
-    @JsonIgnore
     @SerializedName("images")
     @JsonProperty("images")
     private List<Image> images;
 
     @JsonIgnore
-    @SerializedName("votes")
-    @JsonProperty("votes")
+//    @SerializedName("votes")
+//    @JsonProperty("votes")
     private List<Vote> votes;
 }
