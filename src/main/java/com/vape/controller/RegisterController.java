@@ -8,6 +8,8 @@ import com.vape.gmailAPI.MailForm;
 import com.vape.model.base.Error;
 import com.vape.model.base.VapeResponse;
 import com.vape.model.request.Authen;
+import com.vape.model.request.Email;
+import com.vape.model.request.ResetPassword;
 import com.vape.model.request.UserRegisterRequest;
 import com.vape.service.AccountService;
 import com.vape.service.UserService;
@@ -28,6 +30,7 @@ public class RegisterController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     public HashMap<String, Integer> authenCode = new HashMap<>();
+    public HashMap<String, Integer> forgotPasswordCode = new HashMap<>();
 
     @Autowired
     private UserService userService;
@@ -63,7 +66,7 @@ public class RegisterController {
             int code = generator.nextInt((9999 - 1000) + 1) + 1000;
             authenCode.put(user.getEmail(), code);
 
-            new GMailer().sendMail(user.getEmail(), "Tạo tài khoản", MailForm.mailForm(user.getName(), code));
+            new GMailer().sendMail(user.getEmail(), "Xác thực email", MailForm.mailForm(user.getName(), code));
 
             Account account = new Account();
             account.setEmail(request.getEmail());
@@ -90,9 +93,54 @@ public class RegisterController {
             if(request.getCode() == authenCode.get(request.getEmail())) {
                 User user = userService.getUserByEmail(request.getEmail());
                 user.setStatus(1);
+                authenCode.remove(request.getEmail());
                 userService.save(user);
                 return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), user);
             }
+        }catch (Exception e){
+            System.out.println("Exception: "+ e);
+        }
+
+        return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
+    }
+
+    @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
+    public VapeResponse<String> forgotPassword(@RequestBody Email request){
+        try{
+            Random generator = new Random();
+            int code = generator.nextInt((9999 - 1000) + 1) + 1000;
+            forgotPasswordCode.put(request.getEmail(), code);
+            new GMailer().sendMail(request.getEmail(), "Xác thực email", MailForm.mailForm(userService.getUserByEmail(request.getEmail()).getName(), code));
+            return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), null);
+        }catch (Exception e){
+            System.out.println("Exception: "+ e);
+        }
+
+        return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
+    }
+
+    @RequestMapping(value = "/forgot-password/auth", method = RequestMethod.POST)
+    public VapeResponse<String> forgotPasswordAuth(@RequestBody Authen request){
+        try{
+            System.out.println(request.getEmail());
+            if(request.getCode() == forgotPasswordCode.get(request.getEmail())) {
+                forgotPasswordCode.remove(request.getEmail());
+                return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), null);
+            }
+        }catch (Exception e){
+            System.out.println("Exception: "+ e);
+        }
+
+        return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
+    }
+
+    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+    public VapeResponse<String> resetPassword(@RequestBody ResetPassword request){
+        try{
+            Account account = accountService.getAccountByEmail(request.getEmail());
+            account.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+            accountService.save(account);
+            return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), null);
         }catch (Exception e){
             System.out.println("Exception: "+ e);
         }
