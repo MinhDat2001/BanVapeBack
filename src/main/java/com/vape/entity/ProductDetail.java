@@ -26,6 +26,7 @@ public class ProductDetail implements Serializable {
 
     @JsonProperty("color")
     private String color;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id", insertable=false, updatable=false)
