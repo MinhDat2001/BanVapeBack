@@ -28,11 +28,12 @@ public class Product implements Serializable {
     private int price;
 
     private String description;
+
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<ProductDetail> productDetails;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

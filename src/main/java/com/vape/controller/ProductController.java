@@ -30,13 +30,15 @@ public class ProductController {
         return null;
     }
 
-    @PostMapping("/products")
+    @GetMapping("/products")
     public VapeResponse<Page<ProductResponse>> getAllProducts(@RequestBody CustomPageRequest request) {
         request.checkData();
         Page<ProductResponse> products = productService.getAllProduct(request.getPageNumber(),
                 request.getPageSize(),
                 request.getSortField(),
                 request.getSortOrder());
-        return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), products);
+        return (products != null && !products.isEmpty())
+                ? VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), products)
+                : VapeResponse.newInstance(Error.EMPTY.getErrorCode(), Error.EMPTY.getMessage(), products);
     }
 }

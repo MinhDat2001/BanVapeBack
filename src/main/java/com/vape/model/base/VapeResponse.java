@@ -34,6 +34,14 @@ public class VapeResponse<T> {
                 .build();
     }
 
+    public static <T> VapeResponse<T> newInstance(Error error, T data) {
+        return VapeResponse.<T>builder()
+                .status(error.getErrorCode())
+                .message(error.getMessage())
+                .data(data)
+                .build();
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);

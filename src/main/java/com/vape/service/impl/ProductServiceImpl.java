@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductResponse> getAllProduct(int pageNumber, int pageSize, String sortField, String sortOrder) {
         Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
         return productRepository.findAll(pageable).map(product ->
                 ProductResponse.builder()
                         .id(product.getId())
@@ -40,6 +41,10 @@ public class ProductServiceImpl implements ProductService {
                         .quantity(product.getQuantity())
                         .price(product.getPrice())
                         .description(product.getDescription())
+//                        .votes(product.getVotes())
+                        .category(product.getCategory())
+                        .images(product.getImages())
+                        .productDetails(product.getProductDetails())
                         .build());
     }
 
