@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "categories")
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +29,6 @@ public class Category implements Serializable {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private Set<Product> products;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> products = new HashSet<>();
 }

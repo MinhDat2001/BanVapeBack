@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @NoArgsConstructor
 public class CustomPageRequest {
 
+    @JsonProperty("key_search")
+    @SerializedName("key_search")
+    private String keySearch;
+
     @JsonProperty("page_number")
     @SerializedName("page_number")
     private Integer pageNumber;

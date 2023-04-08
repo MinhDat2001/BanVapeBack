@@ -46,7 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public boolean deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
-        System.out.println(category);
         if (category == null) {
             return false;
         }

@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -47,16 +48,14 @@ public class ProductResponse {
     @JsonProperty("product_details")
     private List<ProductDetail> productDetails;
 
-    @SerializedName("category")
-    @JsonProperty("category")
-    private Category category;
+    @JsonIgnore
+    private Set<Category> categories;
 
     @SerializedName("images")
     @JsonProperty("images")
     private List<Image> images;
 
-    @JsonIgnore
-//    @SerializedName("votes")
-//    @JsonProperty("votes")
-    private List<Vote> votes;
+    @SerializedName("votes")
+    @JsonProperty("votes")
+    private Set<Vote> votes;
 }
