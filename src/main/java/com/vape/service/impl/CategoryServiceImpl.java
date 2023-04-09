@@ -60,4 +60,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getAll() {
         return  categoryRepository.findAll();
     }
+
+    @Override
+    public Category getCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Không tồn tại category có ID = " + categoryId));
+    }
 }

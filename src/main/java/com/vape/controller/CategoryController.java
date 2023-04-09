@@ -17,8 +17,8 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
-    @PostMapping("/category/create")
-    public VapeResponse<Boolean> createCategory(@RequestBody CategoryRequest request) {
+    @PostMapping("/category")
+    public VapeResponse<Object> createCategory(@RequestBody CategoryRequest request) {
         if (!request.isValid()) {
             return VapeResponse.newInstance(Error.INVALID_PARAM.getErrorCode(), Error.INVALID_PARAM.getMessage(), false);
         }
@@ -28,8 +28,8 @@ public class CategoryController {
                 : VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), false);
     }
 
-    @PutMapping("/category/update")
-    public VapeResponse<Category> updateCategory(@RequestBody CategoryRequest request) {
+    @PutMapping("/category")
+    public VapeResponse<Object> updateCategory(@RequestBody CategoryRequest request) {
         if (!request.isValid() || request.getId() == null) {
             return VapeResponse.newInstance(Error.INVALID_PARAM.getErrorCode(), Error.INVALID_PARAM.getMessage(), null);
         }
@@ -39,19 +39,27 @@ public class CategoryController {
                 : VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
     }
 
-    @DeleteMapping("/category/delete/{id}")
-    public VapeResponse<Boolean> deleteCategory(@PathVariable Long id) {
+    @DeleteMapping("/category/{id}")
+    public VapeResponse<Object> deleteCategory(@PathVariable Long id) {
         boolean isSuccess = categoryService.deleteCategory(id);
         return isSuccess
                 ? VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), true)
                 : VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), false);
     }
 
-    @GetMapping("category/getAll")
-    public VapeResponse<List<Category>> getAllCategory() {
+    @GetMapping("/categories")
+    public VapeResponse<Object> getAllCategory() {
         List<Category> categories = categoryService.getAll();
         return (categories != null && !categories.isEmpty())
                 ? VapeResponse.newInstance(Error.OK, categories)
                 : VapeResponse.newInstance(Error.NOT_OK, categories);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public VapeResponse<Object> getCategoryById(@PathVariable("categoryId") Long categoryId) {
+        Category category = categoryService.getCategoryById(categoryId);
+        return category != null
+                ? VapeResponse.newInstance(Error.OK, category)
+                : VapeResponse.newInstance(Error.NOT_OK, null);
     }
 }
