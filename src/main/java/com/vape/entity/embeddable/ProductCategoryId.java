@@ -19,6 +19,4 @@ public class ProductCategoryId implements Serializable {
 
     @Column(name = "category_id")
     private Long categoryId;
-
-    // constructors, getters, and setters
 }

@@ -21,7 +21,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("product/create")
-    public VapeResponse<Product> createProduct(
+    public VapeResponse<Object> createProduct(
             @RequestParam("files") MultipartFile[] files,
             @RequestParam("data") String data,
             @RequestParam("avatar") MultipartFile avatar
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{productId}")
-    public VapeResponse<ProductResponse> getProductById(@PathVariable Long productId) {
+    public VapeResponse<Object> getProductById(@PathVariable Long productId) {
         if (productId == null) {
             return VapeResponse.newInstance(Error.INVALID_PARAM, null);
         }
@@ -76,7 +76,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}")
-    public VapeResponse<Product> updateProduct(
+    public VapeResponse<Object> updateProduct(
             @PathVariable("productId") Long productId,
             @RequestParam(value = "files", required = false) MultipartFile[] files,
             @RequestParam("data") String data,
@@ -99,7 +99,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{productId}")
-    public VapeResponse<String> deleteProduct(@PathVariable("productId") Long productId) {
+    public VapeResponse<Object> deleteProduct(@PathVariable("productId") Long productId) {
         boolean isSuccess = productService.deleteProduct(productId);
         return isSuccess
                 ? VapeResponse.newInstance(Error.OK, "Xóa thành công product")
