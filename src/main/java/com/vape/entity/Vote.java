@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -19,4 +20,10 @@ public class Vote {
     private double point;
 
     private String review;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private String voter;
 }
