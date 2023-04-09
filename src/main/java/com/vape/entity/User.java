@@ -1,11 +1,14 @@
 package com.vape.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User implements Serializable {
@@ -28,9 +31,11 @@ public class User implements Serializable {
     }
 
     private String role;
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Vote> votes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vote> votes = new HashSet<>();
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     private List<Bill> bills;

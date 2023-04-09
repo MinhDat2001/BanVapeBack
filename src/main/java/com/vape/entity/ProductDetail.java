@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,6 +13,11 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ProductDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +33,9 @@ public class ProductDetail implements Serializable {
     @JsonProperty("color")
     private String color;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id", insertable=false, updatable=false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @JsonIgnore

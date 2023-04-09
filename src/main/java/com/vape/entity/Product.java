@@ -1,12 +1,13 @@
 package com.vape.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 @Setter
 @Getter
+@Table(name = "products")
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,19 +31,18 @@ public class Product implements Serializable {
 
     private String description;
 
-    @JsonBackReference
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     private List<ProductDetail> productDetails;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @ManyToMany
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product")
     private List<Image> images;
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Vote> votes;
+    @OneToMany(mappedBy = "id.product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vote> votes = new HashSet<>();
 }
