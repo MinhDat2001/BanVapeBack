@@ -7,7 +7,9 @@ public enum Error {
     INVALID_AUTHENTICATION(103, "Thông tin xác thực không đúng"),
     INVALID_PARAM(104, "Dữ liệu tham số truyền lên không đúng"),
     EMPTY(110, "Không có dữ liệu"),
-    EXISTED(111, "Đã tồn tại dữ liệu");
+    EXISTED(111, "Đã tồn tại dữ liệu"),
+    NOT_EXISTED(112, "Không tồn tại dữ liệu"),
+    NOT_AUTHORIZED(113, "Không có quyền thực hiện");
 
     private final int errorCode;
     private String message;
