@@ -1,9 +1,10 @@
 package com.vape.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,10 +13,7 @@ import java.io.Serializable;
 
 @Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Image implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +23,9 @@ public class Image implements Serializable {
     @JsonProperty("link")
     private String link;
 
-    @JsonIgnore
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "id", insertable=false, updatable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 }
