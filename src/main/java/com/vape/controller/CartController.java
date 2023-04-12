@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,9 +28,7 @@ public class CartController {
 
     @GetMapping("/getAll")
     public VapeResponse<Object> getAllCart(HttpServletRequest request){
-        String requestTokenHeader = request.getHeader("token");
-        String jwtToken = requestTokenHeader.substring(5);
-        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        String username = getUsernameFromUser(request);
         List<CartView> carts = cartService.getAll(username).stream().map(cart -> CartView.builder()
                 .id(cart.getId())
                 .email(cart.getEmail())
@@ -47,8 +46,35 @@ public class CartController {
         return VapeResponse.newInstance(Error.OK, carts);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public VapeResponse<Object> createCart(@RequestBody CartRequest cartRequest){
-        return VapeResponse.newInstance(Error.OK, cartService.createCart(cartRequest));
+        if (cartRequest == null){
+            return VapeResponse.newInstance(Error.NOT_OK, null);
+        }
+        boolean isCreated = cartService.createCart(cartRequest) != null;
+        return isCreated
+                ? VapeResponse.newInstance(Error.OK, true)
+                : VapeResponse.newInstance(Error.NOT_OK, false);
+    }
+
+    @PutMapping
+    private VapeResponse<Object> updateCart(@RequestBody CartRequest cartRequest){
+        Optional<Cart> cart = cartService.getOne(cartRequest.getId());
+        if (cart.isPresent()){
+            return VapeResponse.newInstance(Error.OK, cartService.updateCart(cartRequest));
+        }
+        return VapeResponse.newInstance(Error.NOT_OK, false);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public VapeResponse<Object> deleteCart(@PathVariable Long id){
+        boolean deleteCart = cartService.deleteCart(id);
+        return deleteCart ? VapeResponse.newInstance(Error.OK, true) : VapeResponse.newInstance(Error.NOT_OK, false);
+    }
+
+    private String getUsernameFromUser(HttpServletRequest request){
+        String requestTokenHeader = request.getHeader("token");
+        String jwtToken = requestTokenHeader.substring(5);
+        return jwtTokenUtil.getUsernameFromToken(jwtToken);
     }
 }

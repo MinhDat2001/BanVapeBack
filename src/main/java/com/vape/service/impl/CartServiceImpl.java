@@ -1,6 +1,7 @@
 package com.vape.service.impl;
 
 import com.vape.entity.Cart;
+import com.vape.model.CartStatus;
 import com.vape.model.request.CartRequest;
 import com.vape.repository.CartRepository;
 import com.vape.service.CartService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -20,10 +22,37 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public Optional<Cart> getOne(Long id) {
+        return cartRepository.findById(id);
+    }
+
+    @Override
     public Cart createCart(CartRequest cartRequest) {
+        Optional<Cart> cart = cartRepository.findById(cartRequest.getId());
+        if (cart.isPresent()){
+            return null;
+        }
         return cartRepository.save(Cart.builder()
                 .email(cartRequest.getEmail())
                 .status(cartRequest.getStatus())
                 .quantity(cartRequest.getQuantity()).build());
+    }
+
+    @Override
+    public Cart updateCart(CartRequest cartRequest) {
+        return cartRepository.save(Cart.builder()
+                .email(cartRequest.getEmail())
+                .status(cartRequest.getStatus())
+                .quantity(cartRequest.getQuantity()).build());
+    }
+
+    @Override
+    public boolean deleteCart(Long id) {
+        Optional<Cart> cart = cartRepository.findById(id);
+        if (cart.isPresent()){
+            return false;
+        }
+        cartRepository.deleteById(id);
+        return true;
     }
 }
