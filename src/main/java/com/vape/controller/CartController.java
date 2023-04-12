@@ -7,11 +7,14 @@ import com.vape.model.base.Error;
 import com.vape.model.base.VapeResponse;
 import com.vape.model.request.CartRequest;
 import com.vape.service.CartService;
+import com.vape.view.CartView;
+import com.vape.view.DetailView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cart")
@@ -27,7 +30,19 @@ public class CartController {
         String requestTokenHeader = request.getHeader("token");
         String jwtToken = requestTokenHeader.substring(5);
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        List<Cart> carts = cartService.getAll(username);
+        List<CartView> carts = cartService.getAll(username).stream().map(cart -> CartView.builder()
+                .id(cart.getId())
+                .email(cart.getEmail())
+                .status(cart.getStatus())
+                .quantity(cart.getQuantity())
+                .detailView(DetailView.builder()
+                        .productID(cart.getProductDetail().getProduct().getId())
+                        .id(cart.getProductDetail().getId())
+                        .color(cart.getProductDetail().getColor())
+                        .avatar(cart.getProductDetail().getAvatar())
+                        .quantity(cart.getProductDetail().getQuantity())
+                        .build())
+                .build()).collect(Collectors.toList());
         System.out.println(VapeResponse.newInstance(Error.OK, carts));
         return VapeResponse.newInstance(Error.OK, carts);
     }
