@@ -61,7 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/register/auth",
                         "/forgot-password",
                         "/forgot-password/auth",
-                        "/reset-password"
+                        "/reset-password",
+                        "cart/**"
                 )
                 .permitAll()
                 // all other requests need to be authenticated

@@ -8,4 +8,12 @@ public interface Constant {
 
         String USER = "USER";
     }
+
+    interface ErrorCode{
+        int ERROR_CODE = 0;
+    }
+
+    interface Message{
+        String SUCCESS = "Thành công.";
+    }
 }
