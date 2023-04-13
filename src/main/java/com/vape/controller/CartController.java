@@ -59,11 +59,8 @@ public class CartController {
 
     @PutMapping
     private VapeResponse<Object> updateCart(@RequestBody CartRequest cartRequest){
-        Optional<Cart> cart = cartService.getOne(cartRequest.getId());
-        if (cart.isPresent()){
-            return VapeResponse.newInstance(Error.OK, cartService.updateCart(cartRequest));
-        }
-        return VapeResponse.newInstance(Error.NOT_OK, false);
+        boolean isExist = cartService.updateCart(cartRequest) != null;
+        return isExist ? VapeResponse.newInstance(Error.OK, true) : VapeResponse.newInstance(Error.NOT_OK, false);
     }
 
     @DeleteMapping("/delete/{id}")

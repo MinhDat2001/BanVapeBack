@@ -40,16 +40,16 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart updateCart(CartRequest cartRequest) {
-        return cartRepository.save(Cart.builder()
-                .email(cartRequest.getEmail())
-                .status(cartRequest.getStatus())
-                .quantity(cartRequest.getQuantity()).build());
+        Cart cart = cartRepository.getById(cartRequest.getId());
+        cart.setQuantity(cartRequest.getQuantity());
+        cart.setStatus(cartRequest.getStatus());
+        return cartRepository.save(cart);
     }
 
     @Override
     public boolean deleteCart(Long id) {
         Optional<Cart> cart = cartRepository.findById(id);
-        if (cart.isPresent()){
+        if (!cart.isPresent()){
             return false;
         }
         cartRepository.deleteById(id);
