@@ -87,4 +87,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 () -> new RuntimeException("Không tìm thấy product detail có ID = " + productDetailId)
         );
     }
+
+    @Override
+    public void updateProductDetail(ProductDetail productDetail) {
+        productDetailRepository.save(productDetail);
+    }
 }

@@ -11,6 +11,7 @@ import com.vape.model.base.VapeResponse;
 import com.vape.model.request.CartRequest;
 import com.vape.model.request.PurchaseRequest;
 import com.vape.service.CartService;
+import com.vape.service.ProductDetailService;
 import com.vape.view.CartView;
 import com.vape.view.DetailView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+    @Autowired
+    private ProductDetailService productDetailService;
 
     @GetMapping("/getAll")
     public VapeResponse<Object> getAllCart(HttpServletRequest request){
@@ -78,20 +81,29 @@ public class CartController {
     public VapeResponse<Object> buyProduct(@RequestBody PurchaseRequest purchaseRequest){
         Optional<Cart> cart = cartService.getOne(purchaseRequest.getIdCart());
         if (cart.isPresent()){
+            ProductDetail productDetail = cart.get().getProductDetail();
+            Product product = productDetail.getProduct();
+            int price = product.getPrice();
+            //neu so luong trong cart lon hon so luong trong product detail
+            if (cart.get().getQuantity() > productDetail.getQuantity()){
+                return VapeResponse.newInstance(Error.INVALID_TOTAL_PRICE_OR_QUANTITY, null);
+            }
+            // neu don hang da duoc thanh toan
             if (cart.get().getStatus() == CartStatus.BOUGHT){
-                // neu don hang da duoc thanh toan
-                return VapeResponse.newInstance(Error.PURCHASE, cart.get());
+                return VapeResponse.newInstance(Error.IS_PURCHASED, cart.get());
             }else {
-                ProductDetail productDetail = cart.get().getProductDetail();
-                Product product = productDetail.getProduct();
-                int price = product.getPrice();
                 //neu so tien truyen vao dung voi gia cua product
-                if (purchaseRequest.getTotalPrice() == price * productDetail.getQuantity() * cart.get().getQuantity()) {
+                if (purchaseRequest.getTotalPrice() == price * cart.get().getQuantity()) {
+                    //cap nhat trang thai don hang
                     cart.get().setStatus(CartStatus.BOUGHT);
                     cartService.purchase(cart.get());
-                    return VapeResponse.newInstance(Error.OK, cart);
+
+                    //cap nhat so luong trong product detail
+                    productDetail.setQuantity(productDetail.getQuantity() - cart.get().getQuantity());
+                    productDetailService.updateProductDetail(productDetail);
+                    return VapeResponse.newInstance(Error.PURCHASE, cart);
                 }
-                return VapeResponse.newInstance(Error.INVALID_TOTAL_PRICE, null);
+                return VapeResponse.newInstance(Error.INVALID_TOTAL_PRICE_OR_QUANTITY, null);
             }
         }
         return VapeResponse.newInstance(Error.NOT_EXISTED, null);
