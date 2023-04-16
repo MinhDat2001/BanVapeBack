@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // We don't need CSRF for this example
-        httpSecurity.csrf().disable()
+        httpSecurity.csrf().disable().cors().and()
                 .authorizeRequests().antMatchers("/authenticate",
                         "/",
                         "/products",
@@ -62,7 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/forgot-password",
                         "/forgot-password/auth",
                         "/reset-password",
-                        "cart/**"
+                        "/login-google",
+                        "/login-facebook"
                 )
                 .permitAll()
                 // all other requests need to be authenticated

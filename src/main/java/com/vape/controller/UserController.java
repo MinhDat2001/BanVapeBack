@@ -1,5 +1,6 @@
 package com.vape.controller;
 
+import com.vape.config.JwtTokenUtil;
 import com.vape.entity.Account;
 import com.vape.entity.User;
 import com.vape.model.reponse.ProductResponse;
@@ -15,10 +16,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@CrossOrigin()
+@CrossOrigin
 @RequestMapping("/user")
 public class UserController {
 
@@ -30,6 +32,9 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -99,6 +104,20 @@ public class UserController {
     public VapeResponse<User> getUserByEmail(@RequestBody UserIdentifyRequest request){
         try{
             User user = userService.getUserByEmail(request.getEmail());
+            return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), user);
+        }catch (Exception e){
+            return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
+        }
+    }
+
+    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    public VapeResponse<User> getUser(HttpServletRequest request){
+        final String requestTokenHeader = request.getHeader("token");
+        String jwtToken = requestTokenHeader.substring(5);
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        try{
+            User user = userService.getUserByEmail(username);
+            System.out.println(username);
             return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), user);
         }catch (Exception e){
             return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);

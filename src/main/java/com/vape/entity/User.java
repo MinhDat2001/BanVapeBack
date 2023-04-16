@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String name;
     private String phone;
     private String address;
+    private String avatar;
 
     private int status;
 
@@ -54,13 +55,14 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String email, String name, String phone, String role, int status) {
+    public User(Long id, String email, String name, String phone, String role, String avatar, int status) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.phone = phone;
         this.role = role;
         this.status = status;
+        this.avatar = avatar;
     }
 
     public String getEmail() {
@@ -101,5 +103,13 @@ public class User implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
