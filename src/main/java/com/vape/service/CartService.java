@@ -12,5 +12,6 @@ public interface CartService {
     Optional<Cart> getOne(Long id);
     Cart createCart(CartRequest cartRequest);
     Cart updateCart(CartRequest cartRequest);
+    Cart purchase(Cart cart);
     boolean deleteCart(Long id);
 }

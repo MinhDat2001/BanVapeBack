@@ -21,14 +21,17 @@ public class Cart implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String email;
     private int quantity;
     private CartStatus status;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", insertable=false, updatable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id", insertable=false, updatable=false)

@@ -9,7 +9,10 @@ public enum Error {
     EMPTY(110, "Không có dữ liệu"),
     EXISTED(111, "Đã tồn tại dữ liệu"),
     NOT_EXISTED(112, "Không tồn tại dữ liệu"),
-    NOT_AUTHORIZED(113, "Không có quyền thực hiện");
+    NOT_AUTHORIZED(113, "Không có quyền thực hiện"),
+
+    PURCHASE(0, "Đơn hàng này đã được thanh toán"),
+    INVALID_TOTAL_PRICE(1, "Số tiền thanh toán không hợp lệ");
 
     private final int errorCode;
     private String message;

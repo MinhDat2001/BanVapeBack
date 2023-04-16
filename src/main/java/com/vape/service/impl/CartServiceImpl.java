@@ -47,6 +47,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public Cart purchase(Cart cart) {
+        return cartRepository.save(cart);
+    }
+
+    @Override
     public boolean deleteCart(Long id) {
         Optional<Cart> cart = cartRepository.findById(id);
         if (!cart.isPresent()){
