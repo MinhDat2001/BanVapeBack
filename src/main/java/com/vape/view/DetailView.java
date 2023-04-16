@@ -1,4 +1,4 @@
-package com.vape.entity;
+package com.vape.view;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,34 +12,20 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProductDetail implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
+@Builder
+public class DetailView implements Serializable {
+
     private Long id;
 
-    @JsonProperty("quantity")
     private int quantity;
 
-    @JsonProperty("avatar")
     private String avatar;
 
-    @JsonProperty("color")
     private String color;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @JsonIgnore
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Cart> carts;
+    private Long productID;
 }

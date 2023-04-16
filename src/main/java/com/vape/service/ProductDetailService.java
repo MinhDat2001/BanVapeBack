@@ -1,6 +1,5 @@
 package com.vape.service;
 
-import com.vape.entity.Product;
 import com.vape.entity.ProductDetail;
 import com.vape.model.request.ProductDetailRequest;
 import org.springframework.stereotype.Service;
@@ -19,4 +18,6 @@ public interface ProductDetailService {
     ProductDetail updateProductDetail(Long productDetailId, ProductDetailRequest productDetail, MultipartFile file);
 
     ProductDetail getProductDetailById(Long productDetailId);
+
+    void updateProductDetail(ProductDetail productDetail);
 }
