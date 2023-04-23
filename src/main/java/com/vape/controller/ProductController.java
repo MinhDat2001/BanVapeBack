@@ -37,7 +37,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/{categoryId}")
+    @PostMapping("/products/getAll/{categoryId}")
     public VapeResponse<Page<ProductResponse>> getAllProducts(@RequestBody CustomPageRequest request, @PathVariable Long categoryId) {
         request.checkData();
         Page<ProductResponse> products;
