@@ -25,7 +25,7 @@ public class CommentController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/comments/{productId}")
+    @PostMapping("/comments/getAll/{productId}")
     public VapeResponse<Page<Comment>> getAllComment(
             @RequestBody CustomPageRequest request,
             @PathVariable("productId") Long productId) {
