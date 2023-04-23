@@ -45,4 +45,7 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "id.product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vote> votes = new HashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    Set<Comment> comments;
 }

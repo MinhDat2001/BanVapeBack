@@ -42,4 +42,11 @@ public class CustomPageRequest {
         if (sortField == null) sortField = "id";
         if (sortOrder == null) sortOrder = "asc";
     }
+
+    public void checkDataComment() {
+        if (pageNumber == null) pageNumber = 1;
+        if (pageSize == null) pageSize = 1;
+        if (sortOrder == null) sortOrder = "asc";
+        if (sortField == null) sortField = "id";
+    }
 }
