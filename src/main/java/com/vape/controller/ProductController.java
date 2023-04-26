@@ -1,6 +1,7 @@
 package com.vape.controller;
 
 import com.google.gson.Gson;
+import com.vape.entity.Category;
 import com.vape.entity.Product;
 import com.vape.model.base.VapeResponse;
 import com.vape.model.base.Error;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin()
@@ -39,6 +42,33 @@ public class ProductController {
 
     @PostMapping("/products/getAll/{categoryId}")
     public VapeResponse<Page<ProductResponse>> getAllProducts(@RequestBody CustomPageRequest request, @PathVariable Long categoryId) {
+        request.checkData();
+        Page<ProductResponse> products;
+        if (request.getKeySearch() != null) {
+            products = productService.getAllProductByName(
+                    request.getPageNumber(),
+                    request.getPageSize(),
+                    request.getSortField(),
+                    request.getSortOrder(),
+                    request.getKeySearch(),
+                    categoryId
+            );
+        } else {
+            products = productService.getAllProduct(
+                    request.getPageNumber(),
+                    request.getPageSize(),
+                    request.getSortField(),
+                    request.getSortOrder(),
+                    categoryId
+            );
+        }
+        return (products != null && !products.isEmpty())
+                ? VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), products)
+                : VapeResponse.newInstance(Error.EMPTY.getErrorCode(), Error.EMPTY.getMessage(), products);
+    }
+
+    @PostMapping("/products/{categoryId}")
+    public VapeResponse<Page<ProductResponse>> getAllProducts1(@RequestBody CustomPageRequest request, @PathVariable Long categoryId) {
         request.checkData();
         Page<ProductResponse> products;
         if (request.getKeySearch() != null) {
@@ -104,5 +134,13 @@ public class ProductController {
         return isSuccess
                 ? VapeResponse.newInstance(Error.OK, "Xóa thành công product")
                 : VapeResponse.newInstance(Error.NOT_OK, "Có lỗi xảy ra khi xóa product có ID = " + productId);
+    }
+
+    @GetMapping("/products")
+    public VapeResponse<Object> getAllProduct() {
+        List<Product> products = productService.getAllProduct();
+        return (products != null && !products.isEmpty())
+                ? VapeResponse.newInstance(Error.OK, products)
+                : VapeResponse.newInstance(Error.NOT_OK, products);
     }
 }
