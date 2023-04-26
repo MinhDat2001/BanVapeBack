@@ -52,6 +52,9 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Cart> carts;
 
+    @OneToMany(mappedBy = "user")
+    Set<Comment> comments;
+
     public User() {
     }
 
