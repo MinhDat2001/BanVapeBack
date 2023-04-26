@@ -20,6 +20,8 @@ public interface ProductService {
 
     Page<ProductResponse> getAllProductByName(int pageNumber, int pageSize, String sortField, String sortOrder, String key, Long categoryId);
 
+    List<Product> getAllProduct();
+
     Product createProduct(CustomProductRequest request, MultipartFile[] files, MultipartFile avatar);
 
     Product updateProduct(Long productId, CustomProductRequest request, MultipartFile[] files, MultipartFile avatar);
