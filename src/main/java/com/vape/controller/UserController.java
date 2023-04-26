@@ -125,13 +125,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public VapeResponse<Page<User>> getAllUser(@RequestBody CustomPageRequest request){
+    public VapeResponse<List<User>> getAllUser(@RequestBody CustomPageRequest request){
         try{
-            request.checkData();
-            Page<User> users = (Page<User>) userService.getAllUsers(request.getPageNumber(),
-                    request.getPageSize(),
-                    request.getSortField(),
-                    request.getSortOrder());
+            List<User> users = userService.findAll();
             return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), users);
         }catch (Exception e){
             return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
