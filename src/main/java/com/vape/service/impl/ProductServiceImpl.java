@@ -87,6 +87,11 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
+    @Override
+    public List<Product> getAllProduct() {
+        return productRepository.findAll();
+    }
+
     public ProductResponse getProductById(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new RuntimeException("Không tồn tại product có ID = " + productId)
