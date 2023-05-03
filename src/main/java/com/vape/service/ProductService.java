@@ -27,4 +27,10 @@ public interface ProductService {
     Product updateProduct(Long productId, CustomProductRequest request, MultipartFile[] files, MultipartFile avatar);
 
     Boolean deleteProduct(Long productId);
+
+    Page<Product> getAllProductPaging(int pageNumber, int pageSize, String sortField, String sortOrder);
+
+    Page<Product> getAllProductByNamePaging(int pageNumber, int pageSize, String sortField, String sortOrder, String key);
+
+    boolean deleteImageById(Long id);
 }

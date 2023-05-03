@@ -136,11 +136,43 @@ public class ProductController {
                 : VapeResponse.newInstance(Error.NOT_OK, "Có lỗi xảy ra khi xóa product có ID = " + productId);
     }
 
-    @GetMapping("/products")
+    @PostMapping("/products")
     public VapeResponse<Object> getAllProduct() {
         List<Product> products = productService.getAllProduct();
         return (products != null && !products.isEmpty())
                 ? VapeResponse.newInstance(Error.OK, products)
                 : VapeResponse.newInstance(Error.NOT_OK, products);
+    }
+
+    @DeleteMapping("/image/{id}")
+    public VapeResponse<Object> deleteImageById(@PathVariable("id") Long id) {
+        boolean isSuccess = productService.deleteImageById(id);
+        return isSuccess
+                ? VapeResponse.newInstance(Error.OK, null)
+                : VapeResponse.newInstance(Error.NOT_OK, null);
+    }
+
+    @PostMapping("/products/paging")
+    public VapeResponse<Object> getAllProductPaging(@RequestBody CustomPageRequest request) {
+        Page<Product> products;
+        if (request.getKeySearch() != null) {
+            products = productService.getAllProductByNamePaging(
+                    request.getPageNumber(),
+                    request.getPageSize(),
+                    request.getSortField(),
+                    request.getSortOrder(),
+                    request.getKeySearch()
+            );
+        } else {
+            products = productService.getAllProductPaging(
+                    request.getPageNumber(),
+                    request.getPageSize(),
+                    request.getSortField(),
+                    request.getSortOrder()
+            );
+        }
+        return (products != null && !products.isEmpty())
+                ? VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), products)
+                : VapeResponse.newInstance(Error.EMPTY.getErrorCode(), Error.EMPTY.getMessage(), products);
     }
 }

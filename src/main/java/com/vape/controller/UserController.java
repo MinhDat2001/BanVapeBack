@@ -12,12 +12,12 @@ import com.vape.model.base.VapeResponse;
 import com.vape.service.AccountService;
 import com.vape.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -107,6 +107,16 @@ public class UserController {
             return VapeResponse.newInstance(Error.OK.getErrorCode(), Error.OK.getMessage(), user);
         }catch (Exception e){
             return VapeResponse.newInstance(Error.NOT_OK.getErrorCode(), Error.NOT_OK.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/{id}")
+    public VapeResponse<User> findUserById(@PathVariable("id") Long id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isPresent()) {
+            return VapeResponse.newInstance(Error.OK, user.get());
+        } else {
+            return VapeResponse.newInstance(Error.EMPTY, null);
         }
     }
 
