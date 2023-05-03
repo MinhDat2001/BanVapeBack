@@ -59,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
                         .price(product.getPrice())
                         .description(product.getDescription())
                         .votes(product.getVotes())
+                        .categories(product.getCategories())
                         .images(product.getImages())
                         .productDetails(product.getProductDetails())
                         .build());
@@ -80,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
                                 .quantity(product.getQuantity())
                                 .price(product.getPrice())
                                 .description(product.getDescription())
+                                .categories(product.getCategories())
                                 .votes(product.getVotes())
                                 .images(product.getImages())
                                 .productDetails(product.getProductDetails())
@@ -97,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
                 .avatar(product.getAvatar())
                 .quantity(product.getQuantity())
                 .price(product.getPrice())
+                .categories(product.getCategories())
                 .description(product.getDescription())
                 .images(product.getImages())
                 .votes(product.getVotes())
@@ -169,7 +172,6 @@ public class ProductServiceImpl implements ProductService {
                     });
                 }
             }
-            System.out.println("ok");
 
             product.setName(request.getName());
             product.setPrice(request.getPrice());
