@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class PaymentController {
     private CartService cartService;
 
     @PostMapping("/payment")
-    public VapeResponse<Object> pay(HttpServletRequest request, @RequestParam("price") double price, @RequestParam("cartId") Long cartId){
+    public VapeResponse<Object> pay(HttpServletRequest request, @RequestParam("price") double price, @RequestParam("cartId") Long cartId) {
         String cancelUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_CANCEL;
         String successUrl = Utils.getBaseURL(request) + "/" + URL_PAYPAL_SUCCESS;
         System.out.println("success: " + successUrl);
@@ -45,8 +46,8 @@ public class PaymentController {
                     successUrl,
                     cartId
             );
-            for(Links links : payment.getLinks()){
-                if(links.getRel().equals("approval_url")){
+            for (Links links : payment.getLinks()) {
+                if (links.getRel().equals("approval_url")) {
                     return VapeResponse.newInstance(Error.OK, links.getHref());
                 }
             }
@@ -57,24 +58,25 @@ public class PaymentController {
     }
 
     @GetMapping(URL_PAYPAL_CANCEL)
-    public VapeResponse<Object> cancelPay(){
-        return VapeResponse.newInstance(Error.NOT_OK, "Thanh toán đã bị hủy bỏ");
+    public RedirectView cancelPay() {
+        return new RedirectView("http://127.0.0.1:8088/paypal/fail");
     }
 
     @GetMapping(URL_PAYPAL_SUCCESS)
-    public VapeResponse<Object> successPay(@RequestParam("paymentId") String paymentId, @RequestParam("token") String token, @RequestParam("PayerID") String payerId, @RequestParam("cartId") Long cartId){
+    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("token") String token, @RequestParam("PayerID") String payerId, @RequestParam("cartId") Long cartId) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
-            if(payment.getState().equalsIgnoreCase("approved")){
+            if (payment.getState().equalsIgnoreCase("approved")) {
                 // todo: update status cart later
+
 //                Cart cart = cartService.getOne(cartId).orElseThrow(() -> new RuntimeException("Không tồn tại giỏ hàng có cartId = " + cartId));
 //                cart.setStatus(CartStatus.PAYMENT);
 //                cartService.purchase(cart);
-                return VapeResponse.newInstance(Error.OK, new PaymentSuccess(cartId, paymentId, token, payerId));
+                return new RedirectView("http://127.0.0.1:8088/paypal/info?paymentId=" + paymentId + "&token=" + token + "&PayerId=" + payerId + "&cartId=" + cartId);
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return VapeResponse.newInstance(Error.NOT_OK, "Có lỗi xảy ra khi thanh toán với giỏ hàng cardID = " + cartId);
+        return new RedirectView("http://127.0.0.1:8088/paypal/fail");
     }
 }
