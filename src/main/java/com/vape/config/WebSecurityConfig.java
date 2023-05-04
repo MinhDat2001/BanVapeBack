@@ -66,7 +66,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/forgot-password/auth",
                         "/reset-password",
                         "/login-google",
-                        "/login-facebook"
+                        "/login-facebook",
+                        "/vnpay/info",
+                        "/vnpay/fail",
+                        "/vnpay/success",
+                        "/paypal/info",
+                        "/paypal/fail",
+                        "/paypal/success",
+                        "/paypal/cancel"
                 )
                 .permitAll()
                 // all other requests need to be authenticated
