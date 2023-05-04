@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user WHERE email=:email", nativeQuery = true)
     public User getUserByEmail(@Param("email") String email);
 
-    @Query(value = "DELETE * FROM user WHERE email=:email", nativeQuery = true)
+    @Query(value = "DELETE FROM user WHERE email=:email", nativeQuery = true)
     public User deleteUserByEmail(@Param("email") String email);
 
     @Query(value = "DELETE * FROM user", nativeQuery = true)

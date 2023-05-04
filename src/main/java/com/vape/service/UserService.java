@@ -62,7 +62,7 @@ public class UserService  {
         return userRepository.getUserByEmail(email);
     }
 
-    @Query(value = "DELETE * FROM user  WHERE user.email=:email AND user.status = 1", nativeQuery = true)
+    @Query(value = "DELETE FROM user  WHERE user.email=:email AND user.status = 1", nativeQuery = true)
     public User deleteUserByEmail(String email) {
         return userRepository.deleteUserByEmail(email);
     }

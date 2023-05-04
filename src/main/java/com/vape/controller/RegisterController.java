@@ -77,7 +77,9 @@ public class RegisterController {
         }catch (Exception e){
 
             try {
-                userService.deleteUserByEmail(request.getEmail());
+                User user =userService.getUserByEmail(request.getEmail());
+
+                userService.delete(user);
             }catch (Exception ex){
 
             }
