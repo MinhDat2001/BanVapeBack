@@ -65,7 +65,7 @@ public class AccountService  {
         return accountRepository.deleteAccountByEmail(email);
     }
 
-    @Query(value = "SELECT * FROM account INNER JOIN user on account.email=user.email WHERE account.email=:email and user.role=0", nativeQuery = true)
+    @Query(value = "SELECT * FROM account INNER JOIN user on account.email=user.email WHERE account.email=:email and user.role='ADMIN'", nativeQuery = true)
     public Account authenAdmin(String email) {
         return accountRepository.authenAdmin(email);
     }
