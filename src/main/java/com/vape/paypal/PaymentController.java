@@ -19,8 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("")
 public class PaymentController {
-    public static final String URL_PAYPAL_SUCCESS = "pay/success"; // todo: cấu hình url thanh toán thành công
-    public static final String URL_PAYPAL_CANCEL = "pay/cancel"; // todo: cấu hình url thanh toán thất bại
+    public static final String URL_PAYPAL_SUCCESS = "paypal/success"; // todo: cấu hình url thanh toán thành công
+    public static final String URL_PAYPAL_CANCEL = "paypal/cancel"; // todo: cấu hình url thanh toán thất bại
     private Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private PaypalService paypalService;
@@ -55,6 +55,7 @@ public class PaymentController {
         }
         return VapeResponse.newInstance(Error.NOT_OK, "Có lỗi khi thanh toán");
     }
+
     @GetMapping(URL_PAYPAL_CANCEL)
     public VapeResponse<Object> cancelPay(){
         return VapeResponse.newInstance(Error.NOT_OK, "Thanh toán đã bị hủy bỏ");

@@ -59,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
                         .price(product.getPrice())
                         .description(product.getDescription())
                         .votes(product.getVotes())
+                        .categories(product.getCategories())
                         .images(product.getImages())
                         .productDetails(product.getProductDetails())
                         .build());
@@ -80,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
                                 .quantity(product.getQuantity())
                                 .price(product.getPrice())
                                 .description(product.getDescription())
+                                .categories(product.getCategories())
                                 .votes(product.getVotes())
                                 .images(product.getImages())
                                 .productDetails(product.getProductDetails())
@@ -102,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
                 .avatar(product.getAvatar())
                 .quantity(product.getQuantity())
                 .price(product.getPrice())
+                .categories(product.getCategories())
                 .description(product.getDescription())
                 .images(product.getImages())
                 .votes(product.getVotes())
@@ -174,7 +177,6 @@ public class ProductServiceImpl implements ProductService {
                     });
                 }
             }
-            System.out.println("ok");
 
             product.setName(request.getName());
             product.setPrice(request.getPrice());
@@ -248,5 +250,33 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return true;
+    }
+
+    @Override
+    public Page<Product> getAllProductPaging(int pageNumber, int pageSize, String sortField, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return productRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Product> getAllProductByNamePaging(int pageNumber, int pageSize, String sortField, String sortOrder, String key) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return productRepository.findAllByNameContainingIgnoreCase(key, pageable);
+    }
+
+    @Override
+    public boolean deleteImageById(Long id) {
+        Image image = imageRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy image có ID = " + id)
+        );
+        try {
+            cloudinaryService.deleteFromUrl(image.getLink());
+            imageRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -48,7 +48,8 @@ public class ProductResponse {
     @JsonProperty("product_details")
     private List<ProductDetail> productDetails;
 
-    @JsonIgnore
+    @SerializedName("categories")
+    @JsonProperty("categories")
     private Set<Category> categories;
 
     @SerializedName("images")
