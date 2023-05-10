@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class PayController {
 
     @Autowired

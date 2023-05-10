@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("")
+@CrossOrigin
 public class PaymentController {
     public static final String URL_PAYPAL_SUCCESS = "paypal/success"; // todo: cấu hình url thanh toán thành công
     public static final String URL_PAYPAL_CANCEL = "paypal/cancel"; // todo: cấu hình url thanh toán thất bại
