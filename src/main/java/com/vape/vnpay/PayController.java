@@ -10,11 +10,16 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
 public class PayController {
+
+    Map<Long, String> listTxnRef = new HashMap<>();
 
     @Autowired
     private ProductRepository productRepository;
@@ -28,7 +33,11 @@ public class PayController {
 
     @PostMapping("/pay")
     public String pay(@RequestBody PayModel payModel, HttpServletRequest request) {
+        String requestTokenHeader = request.getHeader("token").substring(5);
+
         try {
+            Map map = new HashMap<>();
+            map.put(payModel.getVnp_TxnRef(), requestTokenHeader);
             return payService.payWithVNPAY(payModel, request);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -47,7 +56,13 @@ public class PayController {
                                      HttpServletRequest request
     ) {
         if (vnp_ResponseCode != null && vnp_ResponseCode.equals("00")) {
-            String requestTokenHeader = request.getHeader("token").substring(5);
+            String requestTokenHeader="";
+            for(Long txn:listTxnRef.keySet()){
+                if(txn==cartId){
+                    requestTokenHeader = listTxnRef.get(txn);
+                    break;
+                }
+            }
             List<Cart> carts = cartService.getAll(requestTokenHeader);
             for(Cart cart1:carts){
                 Product product = productRepository.findById(cart1.getProductId()).orElseThrow(
