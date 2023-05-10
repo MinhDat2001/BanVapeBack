@@ -63,16 +63,11 @@ public class PaymentController {
     }
 
     @GetMapping(URL_PAYPAL_SUCCESS)
-    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("token") String token, @RequestParam("PayerID") String payerId, @RequestParam("cartId") Long cartId) {
+    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("token") String token, @RequestParam("PayerID") String payerId, @RequestParam("cartId") Long cartId,HttpServletRequest request) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equalsIgnoreCase("approved")) {
-                // todo: update status cart later
-
-//                Cart cart = cartService.getOne(cartId).orElseThrow(() -> new RuntimeException("Không tồn tại giỏ hàng có cartId = " + cartId));
-//                cart.setStatus(CartStatus.PAYMENT);
-//                cartService.purchase(cart);
-                return new RedirectView("http://127.0.0.1:8088/paypal/info?paymentId=" + paymentId + "&token=" + token + "&PayerId=" + payerId + "&cartId=" + cartId);
+                System.out.println();
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());

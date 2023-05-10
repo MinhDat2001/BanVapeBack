@@ -1,13 +1,24 @@
 package com.vape.vnpay;
 
+import com.vape.entity.Cart;
+import com.vape.entity.Product;
+import com.vape.repository.ProductRepository;
+import com.vape.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @RestController
 public class PayController {
+
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CartService cartService;
     final PayService payService;
 
     public PayController(PayService payService) {
@@ -31,12 +42,21 @@ public class PayController {
                                      @RequestParam("vnp_BankCode") String vnp_BankCode, @RequestParam("vnp_BankTranNo") String vnp_BankTranNo,
                                      @RequestParam(value = "vnp_CardType", required = false) String vnp_CardType, @RequestParam(value = "vnp_PayDate", required = false) Long vnp_PayDate,
                                      @RequestParam("vnp_ResponseCode") String vnp_ResponseCode, @RequestParam(value = "vnp_TransactionNo", required = false) String vnp_TransactionNo,
-                                     @RequestParam(value = "vnp_TransactionStatus", required = false) String vnp_TransactionStatus
+                                     @RequestParam(value = "vnp_TransactionStatus", required = false) String vnp_TransactionStatus,
+                                     HttpServletRequest request
     ) {
         if (vnp_ResponseCode != null && vnp_ResponseCode.equals("00")) {
-            // todo: Duong handled update status cartId
-
-            return new RedirectView("http://127.0.0.1:8088/vnpay/info?vnp_Amount=" + vnp_Amount + "&vnp_OrderInfo=" + vnp_OrderInfo + "&cartId=" + cartId + "&vnp_ResponseCode=" + vnp_ResponseCode + "&vnp_BankCode=" + vnp_BankCode + "&vnp_CardType=" + vnp_CardType);
+            String requestTokenHeader = request.getHeader("token").substring(5);
+            List<Cart> carts = cartService.getAll(requestTokenHeader);
+            for(Cart cart1:carts){
+                Product product = productRepository.findById(cart1.getProductId()).orElseThrow(
+                        () -> new RuntimeException("Không tìm thấy product có ID = " + cart1.getProductId())
+                );
+                product.setQuantity(product.getQuantity()-cart1.getQuantity());
+                productRepository.save(product);
+                cartService.deleteCart(cart1.getId());
+            }
+            return new RedirectView("http://127.0.0.1:8088/cart");
         }
         return new RedirectView("http://127.0.0.1:8088/vnpay/fail");
     }

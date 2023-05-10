@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseRequest {
-    @JsonProperty("id_cart")
-    @SerializedName("id_cart")
+    @JsonProperty("idCart")
+    @SerializedName("idCart")
     private Long idCart;
 
     @JsonProperty("quantity")
     @SerializedName("quantity")
     private int quantity;
 
-    @JsonProperty("total_price")
-    @SerializedName("total_price")
+    @JsonProperty("totalPrice")
+    @SerializedName("totalPrice")
     private int totalPrice;
 }

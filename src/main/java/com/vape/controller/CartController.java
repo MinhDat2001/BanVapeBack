@@ -12,6 +12,7 @@ import com.vape.model.reponse.ProductResponse;
 import com.vape.model.request.CartRequest;
 import com.vape.model.request.PurchaseRequest;
 import com.vape.repository.CartRepository;
+import com.vape.repository.ProductRepository;
 import com.vape.service.CartService;
 import com.vape.service.ProductDetailService;
 import com.vape.service.ProductService;
@@ -40,6 +41,9 @@ public class CartController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private ProductDetailService productDetailService;
 
@@ -88,37 +92,42 @@ public class CartController {
     }
 
     //mua hang
-//    @PostMapping("/buy")
-//    public VapeResponse<Object> buyProduct(@RequestBody PurchaseRequest purchaseRequest){
-//        Optional<Cart> cart = cartService.getOne(purchaseRequest.getIdCart());
-//        if (cart.isPresent()){
-//            ProductDetail productDetail = cart.get().getProductDetail();
-//            Product product = productDetail.getProduct();
-//            int price = product.getPrice();
-//            //neu so luong trong cart lon hon so luong trong product detail
-//            if (cart.get().getQuantity() > productDetail.getQuantity()){
-//                return VapeResponse.newInstance(Error.INVALID_TOTAL_PRICE_OR_QUANTITY, null);
-//            }
-//            // neu don hang da duoc thanh toan
-//            if (cart.get().getStatus() == CartStatus.BOUGHT){
-//                return VapeResponse.newInstance(Error.IS_PURCHASED, cart.get());
-//            }else {
-//                //neu so tien truyen vao dung voi gia cua product
-//                if (purchaseRequest.getTotalPrice() == price * cart.get().getQuantity()) {
-//                    //cap nhat trang thai don hang
-//                    cart.get().setStatus(CartStatus.BOUGHT);
-//                    cartService.purchase(cart.get());
-//
-//                    //cap nhat so luong trong product detail
-//                    productDetail.setQuantity(productDetail.getQuantity() - cart.get().getQuantity());
-//                    productDetailService.updateProductDetail(productDetail);
-//                    return VapeResponse.newInstance(Error.PURCHASE, cart);
-//                }
-//                return VapeResponse.newInstance(Error.INVALID_TOTAL_PRICE_OR_QUANTITY, null);
-//            }
-//        }
-//        return VapeResponse.newInstance(Error.NOT_EXISTED, null);
-//    }
+    @PostMapping("/checkBuy")
+    public VapeResponse<Object> checkBuyProduct(@RequestBody PurchaseRequest checkRequest, HttpServletRequest request){
+//      check quantity
+        String requestTokenHeader = request.getHeader("token").substring(5);
+        List<Cart> carts = cartService.getAll(requestTokenHeader);
+        Cart cart = new Cart();
+        for(Cart cart1:carts){
+            if(cart1.getId()==checkRequest.getIdCart()){
+                cart=cart1;
+            }
+        }
+        ProductResponse productResponse = productService.getProductById(cart.getProductId());
+        if(productResponse.getQuantity()>checkRequest.getQuantity()){
+            return VapeResponse.newInstance(Error.NOT_OK, null);
+        }
+        return VapeResponse.newInstance(Error.OK, null);
+    }
+
+    @PostMapping("/buy")
+    public VapeResponse<Object> buyProduct(@RequestBody PurchaseRequest buyRequest, HttpServletRequest request){
+        String requestTokenHeader = request.getHeader("token").substring(5);
+        List<Cart> carts = cartService.getAll(requestTokenHeader);
+        Cart cart = new Cart();
+        for(Cart cart1:carts){
+            if(cart1.getId()==buyRequest.getIdCart()){
+                cart=cart1;
+            }
+        }
+        Cart finalCart = cart;
+        Product product = productRepository.findById(cart.getProductId()).orElseThrow(
+                () -> new RuntimeException("Không tìm thấy product có ID = " + finalCart.getProductId())
+        );
+        product.setQuantity(product.getQuantity()-buyRequest.getQuantity());
+        cartService.deleteCart(finalCart.getId());
+        return VapeResponse.newInstance(Error.OK, null);
+    }
 
     private String getUsernameFromUser(HttpServletRequest request){
         String requestTokenHeader = request.getHeader("token");
