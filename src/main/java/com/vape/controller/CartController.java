@@ -93,39 +93,19 @@ public class CartController {
 
     //mua hang
     @PostMapping("/checkBuy")
-    public VapeResponse<Object> checkBuyProduct(@RequestBody PurchaseRequest checkRequest, HttpServletRequest request){
+    public VapeResponse<Object> checkBuyProduct(HttpServletRequest request){
 //      check quantity
         String requestTokenHeader = request.getHeader("token").substring(5);
         List<Cart> carts = cartService.getAll(requestTokenHeader);
         Cart cart = new Cart();
         for(Cart cart1:carts){
-            if(cart1.getId()==checkRequest.getIdCart()){
-                cart=cart1;
+            Product product = productRepository.findById(cart1.getProductId()).orElseThrow(
+                    () -> new RuntimeException("Không tìm thấy product có ID = " + cart1.getProductId())
+            );
+            if(product.getQuantity()<cart1.getQuantity()){
+                return VapeResponse.newInstance(Error.OK.getErrorCode(),"Số lượng hàng không đủ", null);
             }
         }
-        ProductResponse productResponse = productService.getProductById(cart.getProductId());
-        if(productResponse.getQuantity()>checkRequest.getQuantity()){
-            return VapeResponse.newInstance(Error.NOT_OK, null);
-        }
-        return VapeResponse.newInstance(Error.OK, null);
-    }
-
-    @PostMapping("/buy")
-    public VapeResponse<Object> buyProduct(@RequestBody PurchaseRequest buyRequest, HttpServletRequest request){
-        String requestTokenHeader = request.getHeader("token").substring(5);
-        List<Cart> carts = cartService.getAll(requestTokenHeader);
-        Cart cart = new Cart();
-        for(Cart cart1:carts){
-            if(cart1.getId()==buyRequest.getIdCart()){
-                cart=cart1;
-            }
-        }
-        Cart finalCart = cart;
-        Product product = productRepository.findById(cart.getProductId()).orElseThrow(
-                () -> new RuntimeException("Không tìm thấy product có ID = " + finalCart.getProductId())
-        );
-        product.setQuantity(product.getQuantity()-buyRequest.getQuantity());
-        cartService.deleteCart(finalCart.getId());
         return VapeResponse.newInstance(Error.OK, null);
     }
 
