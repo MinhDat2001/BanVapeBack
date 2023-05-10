@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    @Query(value = "SELECT * from cart where email = :email and status = 1", nativeQuery = true)
+    @Query(value = "SELECT * from cart where email = :email and status = 0", nativeQuery = true)
     List<Cart> findAllCart(String email);
 }

@@ -26,15 +26,11 @@ public class Cart implements Serializable {
     private int quantity;
     private CartStatus status;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable=false, updatable=false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
+    private Long productId;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "id", insertable=false, updatable=false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private ProductDetail productDetail;
+    private String productName;
+
+    private String productImg;
+
+    private int price;
 }

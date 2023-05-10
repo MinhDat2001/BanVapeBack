@@ -28,21 +28,14 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart createCart(CartRequest cartRequest) {
-        Optional<Cart> cart = cartRepository.findById(cartRequest.getId());
-        if (cart.isPresent()){
-            return null;
-        }
-        return cartRepository.save(Cart.builder()
-                .email(cartRequest.getEmail())
-                .status(cartRequest.getStatus())
-                .quantity(cartRequest.getQuantity()).build());
+        return new Cart();
     }
 
     @Override
     public Cart updateCart(CartRequest cartRequest) {
         Cart cart = cartRepository.getById(cartRequest.getId());
         cart.setQuantity(cartRequest.getQuantity());
-        cart.setStatus(cartRequest.getStatus());
+        cart.setStatus(CartStatus.ACTIVE);
         return cartRepository.save(cart);
     }
 

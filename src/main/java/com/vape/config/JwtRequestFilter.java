@@ -34,6 +34,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwtToken = null;
+        System.out.println("token: "+requestTokenHeader);
         // JWT Token is in the form "Vape token". Remove Vape word and get only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Vape ")) {
             jwtToken = requestTokenHeader.substring(5);

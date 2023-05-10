@@ -16,19 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CartRequest extends BaseRequest {
-    @JsonProperty("id")
-    @SerializedName("id")
-    private Long id;
-
-    @JsonProperty("email")
-    @SerializedName("email")
-    private String email;
+    @JsonProperty("productId")
+    @SerializedName("productId")
+    private Long productId;
+    @JsonProperty("Id")
+    @SerializedName("Id")
+    private Long Id;
 
     @JsonProperty("quantity")
     @SerializedName("quantity")
     private int quantity;
-
-    @JsonProperty("status")
-    @SerializedName("status")
-    private CartStatus status;
 }
