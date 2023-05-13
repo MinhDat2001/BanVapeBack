@@ -61,6 +61,16 @@ public class CartController {
                 return VapeResponse.newInstance(Error.NOT_OK, null);
             }
             String requestTokenHeader = request.getHeader("token").substring(5);
+            List<Cart> existCarts = cartRepository.findAllCart(jwtTokenUtil.getUsernameFromToken(requestTokenHeader));
+
+            for (Cart cart1:existCarts){
+                if(cart1.getProductId()==cartRequest.getProductId()){
+                    cart1.setQuantity(cart1.getQuantity()+cartRequest.getQuantity());
+                    cartRepository.save(cart1);
+                    return VapeResponse.newInstance(Error.OK, cart1);
+                }
+            }
+
             Cart cart = new Cart();
             cart.setStatus(CartStatus.ACTIVE);
             cart.setEmail(jwtTokenUtil.getUsernameFromToken(requestTokenHeader));
