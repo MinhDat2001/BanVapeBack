@@ -1,5 +1,6 @@
 package com.vape.vnpay;
 
+import com.vape.config.JwtTokenUtil;
 import com.vape.entity.Cart;
 import com.vape.entity.Product;
 import com.vape.repository.ProductRepository;
@@ -27,6 +28,9 @@ public class PayController {
     private ProductRepository productRepository;
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     final PayService payService;
 
     public PayController(PayService payService) {
@@ -58,17 +62,11 @@ public class PayController {
                                      HttpServletRequest request,
              HttpServletResponse response
     ) {
+        String requestTokenHeader = listTxnRef.get(cartId);
         try {
-            String requestTokenHeader = listTxnRef.get(cartId);
-
-            Cookie cookie = new Cookie("token", requestTokenHeader);
-            cookie.setMaxAge(5 * 60 * 60);
-            System.out.println("--------------: " + requestTokenHeader);
-            cookie.setDomain("localhost");
-            response.addCookie(cookie);
 
             if (vnp_ResponseCode != null && vnp_ResponseCode.equals("00")) {
-                List<Cart> carts = cartService.getAll(requestTokenHeader);
+                List<Cart> carts = cartService.getAll(jwtTokenUtil.getUsernameFromToken(requestTokenHeader));
                 for (Cart cart1 : carts) {
                     Product product = productRepository.findById(cart1.getProductId()).orElseThrow(
                             () -> new RuntimeException("Không tìm thấy product có ID = " + cart1.getProductId())
@@ -77,11 +75,18 @@ public class PayController {
                     productRepository.save(product);
                     cartService.deleteCart(cart1.getId());
                 }
-                return new RedirectView("http://127.0.0.1:3000/cart");
+
+                Cookie cookie = new Cookie("token", requestTokenHeader);
+                response.addCookie(cookie);
+
+                return new RedirectView("http://localhost:3000/cart");
             }
         }catch (Exception e){
             System.out.println("exception: "+e);
         }
+
+        Cookie cookie = new Cookie("token", requestTokenHeader);
+        response.addCookie(cookie);
         return new RedirectView("http://127.0.0.1:3000/");
     }
 }
