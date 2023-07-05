@@ -107,7 +107,6 @@ public class CartController {
 //      check quantity
         String requestTokenHeader = request.getHeader("token").substring(5);
         List<Cart> carts = cartService.getAll(requestTokenHeader);
-        Cart cart = new Cart();
         for(Cart cart1:carts){
             Product product = productRepository.findById(cart1.getProductId()).orElseThrow(
                     () -> new RuntimeException("Không tìm thấy product có ID = " + cart1.getProductId())

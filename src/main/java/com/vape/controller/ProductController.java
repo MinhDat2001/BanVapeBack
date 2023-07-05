@@ -136,7 +136,7 @@ public class ProductController {
                 : VapeResponse.newInstance(Error.NOT_OK, "Có lỗi xảy ra khi xóa product có ID = " + productId);
     }
 
-    @PostMapping("/products")
+    @GetMapping("/products")
     public VapeResponse<Object> getAllProduct() {
         List<Product> products = productService.getAllProduct();
         return (products != null && !products.isEmpty())
